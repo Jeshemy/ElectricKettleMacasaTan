@@ -6,6 +6,7 @@ public class ElectricKettle {
     private int waterLevel;      // current water level (L)
     private boolean isOn;
 
+
     public ElectricKettle() {
         capacity = 1700;         // 1700 mL = 1.7 L
         temperature = 25;
@@ -46,7 +47,7 @@ public class ElectricKettle {
             temperature += 5;
             if (temperature >= maxTemperature) {
                 temperature = maxTemperature;
-                turnOff();
+                isOn = false;
             }
         }
     }
