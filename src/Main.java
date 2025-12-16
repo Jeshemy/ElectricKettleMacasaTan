@@ -97,10 +97,26 @@ class ElectricKettleUI extends JFrame {
         btnAdd.addActionListener(e -> {
             int amount = parseMilliliters();
             if (amount >= 0) {
-                kettle.addWater(amount);
+                int current = kettle.getLevel();
+                int capacity = kettle.getCapacity();
+
+                if (current >= capacity) {
+                    JOptionPane.showMessageDialog(this, "Kettle is already FULL!");
+                    return;
+                }
+
+                if (current + amount > capacity) {
+                    JOptionPane.showMessageDialog(this,
+                            "Cannot add that much water! Kettle can only handle 1700 mL.");
+                    kettle.addWater(capacity - current);
+                } else {
+                    kettle.addWater(amount);
+                }
+
                 updateStatus();
             }
         });
+
 
         btnRemove.addActionListener(e -> {
             int amount = parseMilliliters();
@@ -115,11 +131,15 @@ class ElectricKettleUI extends JFrame {
                 JOptionPane.showMessageDialog(this, "Cannot turn ON. Kettle has no water!");
                 return;
             }
+
             kettle.turnOn();
             imageLabel.setIcon(imgOn);
             updateStatus();
+
+            inputWater.setText("");
             startHeating();
         });
+
 
         btnOff.addActionListener(e -> {
             kettle.turnOff();
@@ -166,15 +186,32 @@ class ElectricKettleUI extends JFrame {
         heatTimer = new Timer(500, e -> {
             kettle.heatWater();
             updateStatus();
-            if (kettle.isBoiled()) {
-                imageLabel.setIcon(imgBoil);
+
+            if (kettle.getTemperature() >= 100) {
                 ((Timer) e.getSource()).stop();
+
+                imageLabel.setIcon(imgBoil);
+
+                Timer resetTimer = new Timer(2000, evt -> {
+                    kettle.turnOff();
+                    kettle.removeWater(kettle.getLevel());
+                    kettle.temperature = 25;
+
+                    imageLabel.setIcon(imgDefault);
+                    updateStatus();
+
+                    ((Timer) evt.getSource()).stop();
+                });
+                resetTimer.start();
+
                 JOptionPane.showMessageDialog(this,
                         "Water has finished boiling!");
             }
         });
+
         heatTimer.start();
     }
+
 
     private void updateStatus() {
         txtPower.setText("POWER : " + kettle.getPowerStatus());

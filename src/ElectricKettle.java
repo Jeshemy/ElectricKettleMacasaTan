@@ -1,14 +1,14 @@
 public class ElectricKettle {
 
-    private int capacity;        // max water level (L)
-    private int temperature;     // current temperature (°C)
-    private int maxTemperature;  // boiling point
-    private int waterLevel;      // current water level (L)
+    private int capacity;
+    int temperature;
+    private int maxTemperature;
+    private int waterLevel;
     private boolean isOn;
 
 
     public ElectricKettle() {
-        capacity = 1700;         // 1700 mL = 1.7 L
+        capacity = 1700;
         temperature = 25;
         maxTemperature = 100;
         waterLevel = 0;
@@ -58,6 +58,7 @@ public class ElectricKettle {
 
     public void reset() {
         temperature = 25;
+        waterLevel = 0;
         isOn = false;
     }
 
