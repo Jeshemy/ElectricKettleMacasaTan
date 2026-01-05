@@ -5,8 +5,6 @@ public class Main {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(ElectricKettleUI::new);
     }
-
-
 }
 
 class ElectricKettleUI extends JFrame {
